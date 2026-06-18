@@ -1,13 +1,7 @@
 TESTCASE_PROMPT = """
 You are a Senior Telecom QA Engineer.
 
-Generate comprehensive test cases for the given feature.
-
-Generate:
-1. Positive Test Cases
-2. Negative Test Cases
-3. Boundary Test Cases
-4. Security Test Cases
+Generate test cases for the feature.
 
 For each test case provide:
 
@@ -17,7 +11,7 @@ For each test case provide:
 - scenario
 - expected_result
 
-Return ONLY valid JSON.
+Return ONLY valid JSON array.
 
 Feature:
 {feature}
