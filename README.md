@@ -41,16 +41,26 @@ Output:
 
 * final_report.xlsx
 
+Phase 6 – Defect Triage Agent
 
-Tech Stack
+* Analyze failed test cases
+* Classify defects
+* Assign severity levels
+* Recommend remediation actions
 
-* Python
-* Gemini API
-* Pandas
-* OpenPyXL
-* Git & GitHub
+Phase 7 – Release Readiness Agent
 
-Project Workflow
+* Analyze overall testing results
+* Assess release risks
+* Evaluate production readiness
+* Recommend:
+    * READY FOR RELEASE
+    * NOT READY FOR RELEASE
+* Generate release readiness reports
+
+⸻
+
+Current Workflow
 
 Feature Description
 ↓
@@ -58,55 +68,80 @@ Test Case Generation
 ↓
 Coverage Analysis
 ↓
-Test Execution
+Execution Simulation
 ↓
-Result Analysis
+Root Cause Analysis
 ↓
-QA Report
+Defect Triage
+↓
+Release Readiness Assessment
+↓
+QA Decision Report
 
+⸻
 
+Tech Stack
+
+* Python
+* Gemini API
+* Pandas
+* OpenPyXL
+* Dotenv
+* Git
+* GitHub
+
+⸻
+
+Telecom Use Cases
+
+The project currently demonstrates testing scenarios for:
+
+* International Roaming Packs
+* Recharge Flows
+* Customer Notifications
+* Mobile App UI Validation
+* API Validation
+* Performance Testing
+
+⸻
 
 Future Roadmap
 
-Phase 6 – Defect Triage Agent
+Phase 8 – Human-in-the-Loop QA Agent
 
-* Auto-classify defects
-* Predict severity and priority
-* Suggest ownership teams
+* AI recommendations reviewed by QA engineers
+* Approval / Rejection workflow
+* Confidence scoring
 
-Phase 7 – Release Readiness Agent
+Phase 9 – Telecom Journey Risk Predictor
 
-* Analyze execution results
-* Analyze defect data
-* Generate release risk score
-* Recommend Go / No-Go decision
+* Predict production failures
+* Identify risky customer journeys
+* Release risk forecasting
 
-Phase 8 – Telecom QA Agent
+Phase 10 – Multi-Agent QA Copilot
 
-* Roaming Pack Testing
-* Recharge Journey Testing
-* Billing Validation
-* Customer Onboarding Flows
-* Self-Care App Testing
+* Test Generation Agent
+* Coverage Agent
+* Defect Agent
+* RCA Agent
+* Release Agent
 
-Phase 9 – Human-in-the-Loop QA Copilot
+Working together as a collaborative AI QA system.
 
-* AI generates recommendations
-* QA Engineers review and approve
-* Supports enterprise-grade testing workflows
+⸻
 
-Long-Term Vision
+Key Benefits
 
-Build an AI-powered QA Copilot that assists QA Engineers, Product Managers, and Engineering Teams throughout the software development lifecycle.
+* Faster test creation
+* Improved coverage visibility
+* Automated defect analysis
+* Faster release decisions
+* Reduced manual QA effort
+* Better software quality
 
-The platform will provide:
+⸻
 
-* Test Case Generation
-* Coverage Analysis
-* Test Execution Insights
-* Root Cause Analysis
-* Defect Triage
-* Release Readiness Assessment
-* Telecom-specific QA Intelligence
+Resume Summary
 
-The goal is to improve software quality while keeping humans in control of final decisions.
+Developed an AI-Powered QA Agent using Gemini and Python that automates test case generation, coverage analysis, execution validation, root cause analysis, defect triage, and release readiness assessment for telecom customer journeys.
