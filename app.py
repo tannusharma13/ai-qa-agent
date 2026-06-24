@@ -9,7 +9,7 @@ import os
 load_dotenv()
 
 API_KEY = os.getenv("GEMINI_API_KEY")
-
+print("Loaded key:", API_KEY[:10] if API_KEY else "None")
 
 genai.configure(api_key=API_KEY)
 

@@ -1,18 +1,15 @@
-ANALYSIS_PROMPT = """
-You are a QA Expert.
+ROOT_CAUSE_PROMPT = """
+You are a Senior QA Engineer.
 
-Compare the Expected Result and Actual Result.
+Analyze the failed test cases below.
 
-Return JSON format:
+For each failure provide:
 
-{
-    "status": "PASS or FAIL or PARTIAL PASS",
-    "reason": "short explanation"
-}
+1. Root Cause
+2. Severity (Low/Medium/High/Critical)
+3. Suggested Fix
 
-Expected Result:
-{expected}
+Failures:
 
-Actual Result:
-{actual}
+{failures}
 """
