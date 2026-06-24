@@ -3,3 +3,6 @@ venv/
 __pycache__/
 output/*.xlsx
 .DS_Store
+output/
+check.py
+test_key.py
