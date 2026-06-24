@@ -59,15 +59,21 @@ Phase 7 – Release Readiness Agent
 * Generate release readiness reports
 
 
-Phase 8 – Human-in-the-Loop QA Agent
+Phase 8 – Human-in-the-Loop (HITL) Agent
 
-* Generates AI release recommendations
+* AI recommends release decision
+* Human reviewer validates recommendation
+* Final decision recorded
+* Provides governance and accountability
 
-* Allows QA Manager approval/rejection
+Phase 9 – Telecom Journey Agent
 
-* Records final human decision
-
-* Maintains governance and audit trail
+* Telecom-specific QA analysis
+* Customer journey validation
+* Roaming activation testing
+* Recharge flow testing
+* Billing journey validation
+* Telecom risk assessment
 ⸻
 
 Current Workflow
@@ -117,11 +123,6 @@ The project currently demonstrates testing scenarios for:
 
 Future Roadmap
 
-Phase 9 – Telecom Journey Risk Predictor
-
-* Predict production failures
-* Identify risky customer journeys
-* Release risk forecasting
 
 Phase 10 – Multi-Agent QA Copilot
 
