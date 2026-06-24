@@ -58,6 +58,16 @@ Phase 7 – Release Readiness Agent
     * NOT READY FOR RELEASE
 * Generate release readiness reports
 
+
+Phase 8 – Human-in-the-Loop QA Agent
+
+* Generates AI release recommendations
+
+* Allows QA Manager approval/rejection
+
+* Records final human decision
+
+* Maintains governance and audit trail
 ⸻
 
 Current Workflow
@@ -106,12 +116,6 @@ The project currently demonstrates testing scenarios for:
 ⸻
 
 Future Roadmap
-
-Phase 8 – Human-in-the-Loop QA Agent
-
-* AI recommendations reviewed by QA engineers
-* Approval / Rejection workflow
-* Confidence scoring
 
 Phase 9 – Telecom Journey Risk Predictor
 
