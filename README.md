@@ -74,6 +74,14 @@ Phase 9 – Telecom Journey Agent
 * Recharge flow testing
 * Billing journey validation
 * Telecom risk assessment
+
+Phase 10 – Multi-Agent QA Copilot
+
+* Orchestrates all QA agents
+* Runs end-to-end QA workflow
+* Generates consolidated QA report
+* Single-command execution
+* Human approval integrated
 ⸻
 
 Current Workflow
@@ -118,21 +126,6 @@ The project currently demonstrates testing scenarios for:
 * Mobile App UI Validation
 * API Validation
 * Performance Testing
-
-⸻
-
-Future Roadmap
-
-
-Phase 10 – Multi-Agent QA Copilot
-
-* Test Generation Agent
-* Coverage Agent
-* Defect Agent
-* RCA Agent
-* Release Agent
-
-Working together as a collaborative AI QA system.
 
 ⸻
 
