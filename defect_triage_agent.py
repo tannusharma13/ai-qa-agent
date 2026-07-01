@@ -1,66 +1,72 @@
-import pandas as pd
-import google.generativeai as genai
-from dotenv import load_dotenv
-from defect_prompt import DEFECT_TRIAGE_PROMPT
 import os
 import time
+import pandas as pd
 
-load_dotenv()
+from config.gemini import ask_ai
+from defect_prompt import DEFECT_TRIAGE_PROMPT
 
-API_KEY = os.getenv("GEMINI_API_KEY")
+# ---------------------------------
+# Load Execution Report
+# ---------------------------------
 
-genai.configure(api_key=API_KEY)
+execution_report = "output/execution_report.xlsx"
 
-model = genai.GenerativeModel(
-    "gemini-2.5-flash"
-)
+if not os.path.exists(execution_report):
+    print("❌ execution_report.xlsx not found.")
+    exit()
 
-df = pd.read_excel(
-    "output/execution_report.xlsx"
-)
+df = pd.read_excel(execution_report)
 
 results = []
 
-for index, row in df.iterrows():
+# ---------------------------------
+# Analyze Failed Test Cases
+# ---------------------------------
+
+for _, row in df.iterrows():
 
     if row["status"] != "FAIL":
         continue
 
-    expected = row["expected_result"]
-    actual = row["actual_result"]
+    print(f"\n🔍 Analyzing {row['test_id']}...")
 
-    print(f"\nAnalyzing {row['test_id']}...")
+    prompt = DEFECT_TRIAGE_PROMPT.format(
+        expected=row["expected_result"],
+        actual=row["actual_result"]
+    )
 
     while True:
         try:
-            response = model.generate_content(
-                DEFECT_TRIAGE_PROMPT.format(
-                    expected=expected,
-                    actual=actual
-                )
-            )
+            analysis = ask_ai(prompt)
             break
 
         except Exception as e:
-            print("Rate limit hit. Waiting 30 seconds...")
-            time.sleep(30)
+            print(f"⚠️ {e}")
+            print("Retrying in 20 seconds...")
+            time.sleep(20)
 
     results.append({
         "test_id": row["test_id"],
-        "analysis": response.text
+        "analysis": analysis
     })
 
-    time.sleep(5)
+    # Small delay to avoid hitting API limits
+    time.sleep(2)
 
-    time.sleep(5)
+# ---------------------------------
+# Save Report
+# ---------------------------------
 
 report_df = pd.DataFrame(results)
 
+os.makedirs("output", exist_ok=True)
+
+output_file = "output/defect_report.xlsx"
+
 report_df.to_excel(
-    "output/defect_report.xlsx",
+    output_file,
     index=False
 )
 
-print(
-    "\nDefect Triage completed."
-)
+print(f"\n✅ Defect triage completed.")
+print(f"📄 Report saved to {output_file}")

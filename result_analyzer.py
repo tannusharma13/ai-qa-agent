@@ -1,28 +1,29 @@
-import pandas as pd
-import google.generativeai as genai
-from dotenv import load_dotenv
+from config.gemini import ask_ai
 from analysis_prompt import ROOT_CAUSE_PROMPT
+
+import pandas as pd
 import os
 
-load_dotenv()
+# -------------------------------
+# Load Execution Report
+# -------------------------------
+execution_report = "output/execution_report.xlsx"
 
-API_KEY = os.getenv("GEMINI_API_KEY")
+if not os.path.exists(execution_report):
+    raise FileNotFoundError(
+        f"{execution_report} not found."
+    )
 
-genai.configure(api_key=API_KEY)
+df = pd.read_excel(execution_report)
 
-model = genai.GenerativeModel(
-    "gemini-2.5-flash"
-)
-
-df = pd.read_excel(
-    "output/execution_report.xlsx"
-)
-
+# -------------------------------
+# Collect Failed Test Cases
+# -------------------------------
 all_failures = ""
 
-for index, row in df.iterrows():
+for _, row in df.iterrows():
 
-    if row["status"] == "FAIL":
+    if row["status"].upper() == "FAIL":
 
         all_failures += f"""
 Test ID: {row['test_id']}
@@ -39,24 +40,39 @@ Actual:
 --------------------------------
 """
 
+# -------------------------------
+# Handle No Failures
+# -------------------------------
+if not all_failures.strip():
+
+    print("✅ No failed test cases found.")
+    exit()
+
+# -------------------------------
+# Generate Root Cause Analysis
+# -------------------------------
 print("Analyzing failures...")
 
-response = model.generate_content(
+analysis = ask_ai(
     ROOT_CAUSE_PROMPT.format(
         failures=all_failures
     )
 )
 
-print("\nRoot Cause Analysis:\n")
-print(response.text)
+# -------------------------------
+# Display Analysis
+# -------------------------------
+print("\n========== ROOT CAUSE ANALYSIS ==========\n")
+print(analysis)
 
-with open(
-    "output/root_cause_report.txt",
-    "w"
-) as f:
+# -------------------------------
+# Save Report
+# -------------------------------
+os.makedirs("output", exist_ok=True)
 
-    f.write(response.text)
+report_path = "output/root_cause_report.txt"
 
-print(
-    "\nRoot cause report saved to output/root_cause_report.txt"
-)
+with open(report_path, "w", encoding="utf-8") as file:
+    file.write(analysis)
+
+print(f"\n✅ Root cause report saved to {report_path}")

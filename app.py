@@ -1,74 +1,81 @@
+from config.gemini import ask_ai
 from coverage_agent import COVERAGE_PROMPT
-from dotenv import load_dotenv
-import google.generativeai as genai
 from prompts import TESTCASE_PROMPT
+
 import pandas as pd
 import json
 import os
+import sys
 
-load_dotenv()
 
-API_KEY = os.getenv("GEMINI_API_KEY")
-print("Loaded key:", API_KEY[:10] if API_KEY else "None")
+# Get Feature Description
 
-genai.configure(api_key=API_KEY)
+if len(sys.argv) > 1:
+    feature_description = sys.argv[1]
+else:
+    feature_description = input("Enter feature description:\n")
 
-model = genai.GenerativeModel(
-    "gemini-2.5-flash"
-)
-
-feature = input(
-    "Enter feature description:\n"
-)
+ 
+# Generate Test Cases
 
 prompt = TESTCASE_PROMPT.format(
-    feature=feature
+    feature=feature_description
 )
-print("Step 1: Generating test cases...")
 
-response = model.generate_content(prompt)
+print("Step 1: Generating Test Cases...")
 
-print("Step 2: Test cases generated!")
+result = ask_ai(prompt)
 
-result = response.text
+print("✅ Test Cases Generated")
 
-print("Step 3: Generating coverage report...")
+
+# Coverage Analysis
 
 coverage_prompt = COVERAGE_PROMPT.format(
     test_cases=result
 )
 
-coverage_response = model.generate_content(
-    coverage_prompt
-)
+print("Step 2: Generating Coverage Report...")
 
-print("Step 4: Coverage report generated!")
+coverage_result = ask_ai(coverage_prompt)
+
+print("✅ Coverage Report Generated")
 
 
-print("\nGenerated Test Cases:\n")
+# Display Results
+
+print("\n========== GENERATED TEST CASES ==========\n")
 print(result)
 
-print("\nCoverage Report:\n")
-print(coverage_response.text)
+print("\n========== COVERAGE REPORT ==========\n")
+print(coverage_result)
 
-# Remove markdown wrappers
-cleaned = (
-    result
-    .replace("```json", "")
-    .replace("```", "")
-    .strip()
-)
 
-# Convert JSON string to Python object
-data = json.loads(cleaned)
+# Convert JSON Response to Excel
 
-# Convert to DataFrame
-df = pd.DataFrame(data)
+try:
+    cleaned = (
+        result
+        .replace("```json", "")
+        .replace("```", "")
+        .strip()
+    )
 
-# Export Excel
-df.to_excel(
-    "output/testcases.xlsx",
-    index=False
-)
+    data = json.loads(cleaned)
 
-print("\nExcel file saved to output/testcases.xlsx")
+    df = pd.DataFrame(data)
+
+    os.makedirs("output", exist_ok=True)
+
+    excel_path = "output/testcases.xlsx"
+
+    df.to_excel(
+        excel_path,
+        index=False
+    )
+
+    print(f"\n✅ Excel file saved to {excel_path}")
+
+except Exception as e:
+    print("\n❌ Error while creating Excel file:")
+    print(e)

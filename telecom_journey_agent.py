@@ -1,30 +1,39 @@
-import pandas as pd
-import google.generativeai as genai
-from dotenv import load_dotenv
-from journey_prompt import JOURNEY_PROMPT
 import os
+import pandas as pd
 
-load_dotenv()
+from config.gemini import ask_ai
+from journey_prompt import JOURNEY_PROMPT
 
-genai.configure(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
+# ---------------------------------
+# Check Execution Report
+# ---------------------------------
 
-model = genai.GenerativeModel(
-    "gemini-2.5-flash"
-)
+execution_report = "output/execution_report.xlsx"
 
-# STEP 3 - Read FAIL rows
+if not os.path.exists(execution_report):
+    raise FileNotFoundError(f"{execution_report} not found.")
 
-df = pd.read_excel(
-    "output/execution_report.xlsx"
-)
+# ---------------------------------
+# Load Execution Report
+# ---------------------------------
+
+df = pd.read_excel(execution_report)
 
 failures = df[
-    df["status"] == "FAIL"
+    df["status"].str.upper() == "FAIL"
 ]
 
-# STEP 4 - Build failure summary
+# ---------------------------------
+# Handle No Failures
+# ---------------------------------
+
+if failures.empty:
+    print("✅ No failed test cases found.")
+    exit()
+
+# ---------------------------------
+# Build Failure Summary
+# ---------------------------------
 
 all_failures = ""
 
@@ -32,26 +41,51 @@ for _, row in failures.iterrows():
 
     all_failures += f"""
 Test ID: {row['test_id']}
-Scenario: {row['scenario']}
-Expected: {row['expected_result']}
-Actual: {row['actual_result']}
 
+Scenario:
+{row['scenario']}
+
+Expected:
+{row['expected_result']}
+
+Actual:
+{row['actual_result']}
+
+---------------------------------------
 """
 
-response = model.generate_content(
+# ---------------------------------
+# Generate Telecom Journey Analysis
+# ---------------------------------
+
+print("📱 Generating Telecom Journey Analysis...")
+
+analysis = ask_ai(
     JOURNEY_PROMPT.format(
         failures=all_failures
     )
 )
 
-# STEP 5 - Save report
+# ---------------------------------
+# Save Report
+# ---------------------------------
+
+os.makedirs("output", exist_ok=True)
+
+output_file = "output/telecom_journey_report.txt"
 
 with open(
-    "output/telecom_journey_report.txt",
-    "w"
-) as f:
+    output_file,
+    "w",
+    encoding="utf-8"
+) as file:
+    file.write(analysis)
 
-    f.write(response.text)
+# ---------------------------------
+# Display Report
+# ---------------------------------
 
-print(response.text)
-print("\nTelecom Journey Analysis Completed.")
+print("\n========== TELECOM JOURNEY ANALYSIS ==========\n")
+print(analysis)
+
+print(f"\n✅ Telecom Journey Analysis saved to {output_file}")

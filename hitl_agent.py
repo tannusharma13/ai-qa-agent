@@ -1,50 +1,84 @@
 import os
-import google.generativeai as genai
-from dotenv import load_dotenv
+
+from config.gemini import ask_ai
 from approval_prompt import HITL_PROMPT
 
-load_dotenv()
+# ---------------------------------
+# Check Release Report
+# ---------------------------------
 
-genai.configure(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
+report_file = "output/release_readiness_report.txt"
 
-model = genai.GenerativeModel(
-    "gemini-2.5-flash"
-)
+if not os.path.exists(report_file):
+    raise FileNotFoundError(f"{report_file} not found.")
 
 with open(
-    "output/release_readiness_report.txt",
-    "r"
-) as f:
+    report_file,
+    "r",
+    encoding="utf-8"
+) as file:
+    release_report = file.read()
 
-    release_report = f.read()
+# ---------------------------------
+# AI Recommendation
+# ---------------------------------
 
-# STEP 4
-response = model.generate_content(
+print("🤖 Generating AI Recommendation...")
+
+recommendation = ask_ai(
     HITL_PROMPT.format(
         release_report=release_report
     )
 )
 
-print("\n===== AI RECOMMENDATION =====\n")
-print(response.text)
+print("\n========== AI RECOMMENDATION ==========\n")
+print(recommendation)
 
-# STEP 5
-decision = input(
-    "\nApprove Release? (yes/no): "
+# ---------------------------------
+# Human Approval
+# ---------------------------------
+
+while True:
+
+    decision = input(
+        "\nApprove Release? (yes/no): "
+    ).strip().lower()
+
+    if decision in ["yes", "no"]:
+        break
+
+    print("❌ Please enter only 'yes' or 'no'.")
+
+final_decision = (
+    "APPROVED"
+    if decision == "yes"
+    else "REJECTED"
 )
 
-# STEP 6
+# ---------------------------------
+# Save Decision
+# ---------------------------------
+
+os.makedirs("output", exist_ok=True)
+
+output_file = "output/final_release_decision.txt"
+
 with open(
-    "output/final_release_decision.txt",
-    "w"
-) as f:
+    output_file,
+    "w",
+    encoding="utf-8"
+) as file:
 
-    f.write("AI Recommendation:\n\n")
-    f.write(response.text)
+    file.write("========== AI QA COPILOT ==========\n\n")
 
-    f.write("\n\nHuman Decision:\n")
-    f.write(decision.upper())
+    file.write("AI Recommendation\n")
+    file.write("-----------------\n")
+    file.write(recommendation)
 
-print("\nFinal Decision Saved.")
+    file.write("\n\n")
+
+    file.write("Human Decision\n")
+    file.write("-----------------\n")
+    file.write(final_decision)
+
+print(f"\n✅ Final decision saved to {output_file}")

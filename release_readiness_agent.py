@@ -1,26 +1,32 @@
-import pandas as pd
-import google.generativeai as genai
-from dotenv import load_dotenv
-from release_prompt import RELEASE_PROMPT
 import os
+import pandas as pd
 
-load_dotenv()
+from config.gemini import ask_ai
+from release_prompt import RELEASE_PROMPT
 
-API_KEY = os.getenv("GEMINI_API_KEY")
+# ---------------------------------
+# Check Required Files
+# ---------------------------------
 
-genai.configure(api_key=API_KEY)
+execution_report = "output/execution_report.xlsx"
+defect_report = "output/defect_report.xlsx"
 
-model = genai.GenerativeModel(
-    "gemini-2.5-flash"
-)
+if not os.path.exists(execution_report):
+    raise FileNotFoundError(f"{execution_report} not found.")
 
-execution_df = pd.read_excel(
-    "output/execution_report.xlsx"
-)
+if not os.path.exists(defect_report):
+    raise FileNotFoundError(f"{defect_report} not found.")
 
-defect_df = pd.read_excel(
-    "output/defect_report.xlsx"
-)
+# ---------------------------------
+# Load Reports
+# ---------------------------------
+
+execution_df = pd.read_excel(execution_report)
+defect_df = pd.read_excel(defect_report)
+
+# ---------------------------------
+# Calculate Test Summary
+# ---------------------------------
 
 total_tests = len(execution_df)
 
@@ -36,32 +42,54 @@ failed = len(
     ]
 )
 
-summary = f"""
-Total Tests: {total_tests}
-Passed: {passed}
-Failed: {failed}
-Pass Percentage: {(passed/total_tests)*100:.2f}%
-"""
-
-defects = defect_df.to_string()
-
-response = model.generate_content(
-    RELEASE_PROMPT.format(
-        summary=summary,
-        defects=defects
-    )
+pass_percentage = (
+    (passed / total_tests) * 100
+    if total_tests > 0
+    else 0
 )
 
-report = response.text
+summary = f"""
+Total Tests : {total_tests}
+Passed      : {passed}
+Failed      : {failed}
+Pass %      : {pass_percentage:.2f}%
+"""
+
+# ---------------------------------
+# Prepare AI Prompt
+# ---------------------------------
+
+defects = defect_df.to_string(index=False)
+
+prompt = RELEASE_PROMPT.format(
+    summary=summary,
+    defects=defects
+)
+
+print("📊 Generating Release Readiness Report...")
+
+report = ask_ai(prompt)
+
+# ---------------------------------
+# Save Report
+# ---------------------------------
+
+os.makedirs("output", exist_ok=True)
+
+output_file = "output/release_readiness_report.txt"
 
 with open(
-    "output/release_readiness_report.txt",
-    "w"
+    output_file,
+    "w",
+    encoding="utf-8"
 ) as file:
     file.write(report)
 
+# ---------------------------------
+# Display Report
+# ---------------------------------
+
+print("\n========== RELEASE READINESS ==========\n")
 print(report)
 
-print(
-    "\nRelease readiness report generated."
-)
+print(f"\n✅ Release readiness report saved to {output_file}")
