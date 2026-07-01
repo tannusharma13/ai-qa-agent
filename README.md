@@ -1,145 +1,181 @@
-AI-Powered QA Agent
+🤖 AI QA Copilot
 
-An AI-driven Quality Assurance Agent that automates software testing activities using Gemini LLM.
+An AI-powered Quality Assurance automation platform that leverages Large Language Models (LLMs) to automate software testing activities—from test case generation to release readiness analysis.
 
-Phase 1 – Test Case Generation
+The project simulates an intelligent QA team where specialized AI agents collaborate to generate test cases, analyze coverage, perform execution analysis, identify root causes, triage defects, assess release readiness, and evaluate business impact.
 
-* Generate functional test cases from feature descriptions
-* Export generated test cases to Excel
-
-Phase 2 – Coverage Analysis Agent
-
-* Analyze generated test cases
-* Measure test coverage
-* Identify missing test scenarios
-* Provide QA recommendations
-
-Phase 3 – Execution Agent
-
-* Simulate execution of generated test cases
-* Capture actual results
-* Generate execution reports
-* Mark PASS/FAIL status
-
-Phase 4 – Result Analysis Agent
-
-* Analyze execution results
-* Detect failed test cases
-* Identify root causes
-* Generate QA summary and recommendations
-
-
-Phase 5 – Root Cause Analysis Agent
-
-* Analyze failed test cases using Gemini
-* Compare expected vs actual results
-* Identify probable root causes
-* Generate failure explanations
-* Export final QA report
-
-Output:
-
-* final_report.xlsx
-
-Phase 6 – Defect Triage Agent
-
-* Analyze failed test cases
-* Classify defects
-* Assign severity levels
-* Recommend remediation actions
-
-Phase 7 – Release Readiness Agent
-
-* Analyze overall testing results
-* Assess release risks
-* Evaluate production readiness
-* Recommend:
-    * READY FOR RELEASE
-    * NOT READY FOR RELEASE
-* Generate release readiness reports
-
-
-Phase 8 – Human-in-the-Loop (HITL) Agent
-
-* AI recommends release decision
-* Human reviewer validates recommendation
-* Final decision recorded
-* Provides governance and accountability
-
-Phase 9 – Telecom Journey Agent
-
-* Telecom-specific QA analysis
-* Customer journey validation
-* Roaming activation testing
-* Recharge flow testing
-* Billing journey validation
-* Telecom risk assessment
-
-Phase 10 – Multi-Agent QA Copilot
-
-* Orchestrates all QA agents
-* Runs end-to-end QA workflow
-* Generates consolidated QA report
-* Single-command execution
-* Human approval integrated
 ⸻
 
-Current Workflow
+🚀 Features
+
+* ✅ AI-powered Test Case Generation
+* ✅ Coverage Analysis
+* ✅ Execution Result Analysis
+* ✅ Root Cause Analysis
+* ✅ Defect Triage
+* ✅ Release Readiness Assessment
+* ✅ Human Approval (Human-in-the-Loop)
+* ✅ Telecom Customer Journey Validation
+* ✅ Automatic Excel Report Generation
+* ✅ AI-generated QA Reports
+
+⸻
+
+🏗 Architecture
 
 Feature Description
-↓
-Test Case Generation
-↓
-Coverage Analysis
-↓
-Execution Simulation
-↓
+        │
+        ▼
+Test Case Generator
+        │
+        ▼
+Coverage Analyzer
+        │
+        ▼
+Execution Agent
+        │
+        ▼
 Root Cause Analysis
-↓
+        │
+        ▼
 Defect Triage
-↓
-Release Readiness Assessment
-↓
-QA Decision Report
+        │
+        ▼
+Release Readiness
+        │
+        ▼
+Human Approval
+        │
+        ▼
+Telecom Journey Validation
+
+Each module behaves like an independent AI QA specialist responsible for a specific stage of the software testing lifecycle.
 
 ⸻
 
-Tech Stack
+⚙ Workflow
+
+1. User provides a feature description.
+2. AI generates comprehensive test cases.
+3. AI evaluates test coverage.
+4. Execution agent simulates execution results.
+5. Failed tests are analyzed for root causes.
+6. AI prioritizes and classifies defects.
+7. Release readiness is evaluated.
+8. Human approval is requested.
+9. Telecom journey impact is analyzed.
+10. Reports are exported in Excel and text formats.
+
+⸻
+
+📂 Project Structure
+
+ai-qa-copilot/
+├── config/
+├── data/
+├── logs/
+├── output/
+├── orchestrator.py
+├── app.py
+├── coverage_agent.py
+├── execution_agent.py
+├── root_cause_agent.py
+├── defect_triage_agent.py
+├── release_readiness_agent.py
+├── telecom_journey_agent.py
+├── hitl_agent.py
+├── prompts.py
+├── README.md
+
+⸻
+
+🛠 Tech Stack
 
 * Python
-* Gemini API
+* Google Gemini API
 * Pandas
 * OpenPyXL
-* Dotenv
-* Git
-* GitHub
+* python-dotenv
 
 ⸻
 
-Telecom Use Cases
+📊 Outputs
 
-The project currently demonstrates testing scenarios for:
+The pipeline automatically generates:
 
-* International Roaming Packs
-* Recharge Flows
-* Customer Notifications
-* Mobile App UI Validation
-* API Validation
-* Performance Testing
-
-⸻
-
-Key Benefits
-
-* Faster test creation
-* Improved coverage visibility
-* Automated defect analysis
-* Faster release decisions
-* Reduced manual QA effort
-* Better software quality
+* Test Cases (Excel)
+* Coverage Report
+* Root Cause Analysis
+* Defect Report
+* Release Readiness Report
+* Final Release Decision
+* Telecom Journey Analysis
 
 ⸻
 
-Resume Summary
+▶ Running the Project
 
-Developed an AI-Powered QA Agent using Gemini and Python that automates test case generation, coverage analysis, execution validation, root cause analysis, defect triage, and release readiness assessment for telecom customer journeys.
+Clone the repository
+
+git clone <repository-url>
+cd ai-qa-copilot
+
+Create a virtual environment
+
+python -m venv venv
+
+Activate the environment
+
+macOS/Linux
+
+source venv/bin/activate
+
+Windows
+
+venv\Scripts\activate
+
+Install dependencies
+
+pip install -r requirements.txt
+
+Create a .env file
+
+GEMINI_API_KEY=YOUR_API_KEY
+
+Run
+
+python orchestrator.py
+
+⸻
+
+📈 Current Capabilities
+
+* Intelligent AI-generated test cases
+* Functional and non-functional coverage analysis
+* Automated root cause analysis
+* AI-assisted defect prioritization
+* Release recommendation
+* Human approval workflow
+* Telecom customer journey validation
+
+⸻
+
+🚀 Future Roadmap
+
+* Retrieval-Augmented Generation (RAG)
+* Multi-Agent Collaboration
+* Jira Integration
+* Slack/Microsoft Teams Notifications
+* CI/CD Integration
+* Enterprise QA Dashboard
+* AI Verification Agent
+* Cross-Project Learning
+* Predictive Defect Analytics
+
+⸻
+
+⭐ Why this project?
+
+Modern software testing is increasingly adopting AI to improve speed, consistency, and release quality.
+
+This project demonstrates how multiple AI agents can collaborate to automate large parts of the QA lifecycle while still allowing human oversight before production deployment.
